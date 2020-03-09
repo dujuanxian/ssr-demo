@@ -28,7 +28,6 @@ app.use('/:id', (req, res) => {
   })
 });
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(
   express.static(path.resolve(__dirname, '..', 'build'), { maxAge: '30d' })
 );
