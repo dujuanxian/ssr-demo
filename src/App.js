@@ -1,19 +1,15 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Style from 'style-it';
 import './App.css';
 
-function App(props) {
-  return (
-    Style.it(`
-      .box {
-        background-color: indianred;
-        width: 100px;
-        height: 100px;
-      }
-    `,
-      <div className="box"/>
-    )
-  );
+class App extends Component {
+  render() {
+    return (
+      Style.it(this.props.style,
+        <div className="box">xxxx</div>
+      )
+    );
+  }
 }
 
 export default App;

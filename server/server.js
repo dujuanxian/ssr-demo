@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import request from 'request'
 
 import express from 'express'
 import React from 'react'
@@ -7,7 +8,7 @@ import ReactDOMServer from 'react-dom/server'
 
 import App from '../src/App'
 
-const PORT = 8080
+const PORT = 8022
 const app = express()
 
 const router = express.Router()
@@ -19,18 +20,20 @@ app.use('/:id', (req, res) => {
       return res.status(500).send('An error occurred')
     }
 
-    return res.send(
-      data.replace(
-        '<div id="root"></div>',
-        `<div id="root">${ReactDOMServer.renderToString(<App/>)}</div>`
+    const CONTACT_URL = `https://my-json-server.typicode.com/dujuanxian/contacts-api/css/${req.params.id}`;
+    request(CONTACT_URL, function (error, response, body) {
+      const style = JSON.parse(body).result;
+      return res.send(
+        data.replace(
+          '<div id="root"></div>',
+          `<div id="root">${ReactDOMServer.renderToString(<App style={style}/>)}</div>`
+        )
       )
-    )
+    });
   })
 });
 
-app.use(
-  express.static(path.resolve(__dirname, '..', 'build'), { maxAge: '30d' })
-);
+app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.use(router)
 
